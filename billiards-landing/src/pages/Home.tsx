@@ -1,7 +1,8 @@
 import '../App.css'
 import { Box } from "@chakra-ui/react"
-import {  Flex, Card, Heading, Image } from "@chakra-ui/react";
+import {  Flex, Card, Heading, Image, Button } from "@chakra-ui/react";
 import { Text } from "@chakra-ui/react";
+import { Link } from "react-router-dom";
 
 function CardBar() {
   return (
@@ -46,7 +47,7 @@ function BackgroundImage() {
 function TrainerCard() {
   return (
     <Card.Root maxW="sm" mx="auto" mt={8} boxShadow="lg" borderRadius="lg" overflow="hidden">
-        <Image src="HoroSponsor.png" alt="Trainer" objectFit="cover" width="100%" height="300px" />
+        <Image src="JusoHasanovic.jpg" alt="Trainer" objectFit="cover" width="100%" height="300px" />
       <Card.Body textAlign="center" p={4}>
         <Heading size="md">Juso Hasanovic</Heading>
         <Text mt={2}>
@@ -121,6 +122,121 @@ function CareerHighlights() {
   );
 }
 
+function ProgramsSection() {
+  return (
+    <Box bg="gray.100" py={12} textAlign="center">
+      <Flex
+        direction={{ base: "column", md: "row" }} 
+        justify="center"
+        align="center"
+        gap={8} 
+        maxW="1200px" 
+        mx="auto" 
+        px={4} 
+      >
+        {/* Beginner Program */}
+        <Box
+          position="relative"
+          borderRadius="lg"
+          overflow="hidden"
+          boxShadow="lg"
+          flex="1"
+          maxW={{ base: "100%", md: "45%" }} 
+          transition="transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out"
+          
+          _hover={{
+            transform: "scale(1.05)", 
+            boxShadow: "xl", 
+          }}
+        >
+          <Image
+            src="/BeginnerProgram.jpg" 
+            alt="Beginner Program"
+            objectFit="cover"
+            width="100%"
+            height="300px"
+          />
+          <Box
+            position="absolute"
+            top="0"
+            left="0"
+            right="0"
+            bottom="0"
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+            bg="rgba(0, 0, 0, 0.5)" 
+            transition="background-color 0.3s ease-in-out" 
+            _hover={{
+              bg: "rgba(0, 0, 0, 0.3)", 
+            }}
+          >
+            <Link to="/beginner-program">
+              <Heading
+                color="white"
+                fontSize="3xl"
+                textShadow="2px 2px 4px rgba(0, 0, 0, 0.8)"
+                cursor="pointer"
+              >
+                Beginner Program
+              </Heading>
+            </Link>
+          </Box>
+        </Box>
+
+        {/* Expert Program */}
+        <Box
+          position="relative"
+          borderRadius="lg"
+          overflow="hidden"
+          boxShadow="lg"
+          flex="1"
+          maxW={{ base: "100%", md: "45%" }} 
+          transition="transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out" 
+          _hover={{
+            transform: "scale(1.05)", 
+            boxShadow: "xl", 
+          }}
+        >
+          <Image
+            src="/ExpertProgram.jpg" 
+            alt="Expert Program"
+            objectFit="cover"
+            width="100%"
+            height="300px"
+          />
+          <Box
+            position="absolute"
+            top="0"
+            left="0"
+            right="0"
+            bottom="0"
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+            bg="rgba(0, 0, 0, 0.5)"
+            transition="background-color 0.3s ease-in-out" 
+            _hover={{
+              bg: "rgba(0, 0, 0, 0.3)", 
+            }}
+          >
+            <Link to="/expert-program">
+              <Heading
+                color="white"
+                fontSize="3xl"
+                textShadow="2px 2px 4px rgba(0, 0, 0, 0.8)"
+                cursor="pointer"
+              >
+                Expert Program
+              </Heading>
+            </Link>
+          </Box>
+        </Box>
+      </Flex>
+    </Box>
+  );
+}
+
 function HomePage() {
     console.log("Home component rendered!");
   return (
@@ -128,6 +244,7 @@ function HomePage() {
         <BackgroundImage />
         <CardBar />
         <CareerHighlights />
+        <ProgramsSection />
     </div>
   );
 }

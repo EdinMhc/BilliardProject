@@ -20,6 +20,7 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
+import {FaBars, FaTimes} from "react-icons/fa"
 import Home from "./pages/Home"
 import { Link } from "react-router-dom";
 
@@ -43,22 +44,34 @@ function Navbar() {
         {/* Hamburger Menu for Mobile */}
         <Box display={{ base: "block", md: "none" }} ml="auto">
           <DrawerRoot>
+            <DrawerBackdrop />
             <DrawerTrigger asChild>
               <IconButton
                 aria-label="Open Menu"
                 variant="ghost"
                 color="white"
-                >
-                {/* Insert icon here */}
+              >
+              <FaBars />
               </IconButton>
             </DrawerTrigger>
-            <DrawerBackdrop />
             <DrawerContent bg="black" color="white">
               <DrawerHeader>
                 <DrawerTitle>Menu</DrawerTitle>
+                <DrawerCloseTrigger asChild>
+                  <IconButton
+                    aria-label="Close Menu"
+                    variant="ghost"
+                    color="white"
+                    position="absolute"
+                    top={2}
+                    right={2}
+                  >
+                  <FaTimes />
+                  </IconButton>
+                </DrawerCloseTrigger>
               </DrawerHeader>
               <DrawerBody>
-                <VStack align="start">
+                <VStack align="start" gap={4}>
                   <Link to="/">
                     <Button variant="ghost" color="white" width="100%" justifyContent="start">
                       Home
@@ -79,6 +92,11 @@ function Navbar() {
                       Billing Plan
                     </Button>
                   </Link>
+                  <Link to="/login">
+                    <Button variant="ghost" color="white" width="100%" justifyContent="start">
+                      Login
+                    </Button>
+                  </Link>
                 </VStack>
               </DrawerBody>
               <DrawerFooter>
@@ -88,13 +106,12 @@ function Navbar() {
                   </Button>
                 </DrawerActionTrigger>
               </DrawerFooter>
-              <DrawerCloseTrigger />
             </DrawerContent>
           </DrawerRoot>
         </Box>
 
         {/* Regular Navbar Links (Hidden on Mobile) */}
-        <Flex display={{ base: "none", md: "flex" }} gap={4} align="center">
+        <Flex display={{ base: "none", md: "flex" }} gap={4} align="center" flex="1">
           <Link to="/">
             <Button variant="ghost" color="white">
               Home
@@ -115,7 +132,7 @@ function Navbar() {
               Billing Plan
             </Button>
           </Link>
-          <Spacer />
+          <Spacer /> {/* Push the login button to the far right */}
           <Link to="/login">
             <Button variant="ghost" colorScheme="whiteAlpha">
               Login

@@ -11,49 +11,49 @@ import {
 } from "@chakra-ui/react";
 
 function TutorialsPage() {
-  const [searchQuery, setSearchQuery] = useState(""); // State for search query
+  const [searchQuery, setSearchQuery] = useState(""); 
 
-  // Placeholder data for videos
+  
   const videos = [
     {
       id: 1,
       title: "Beginner Billiards Techniques",
       description: "Learn the basics of billiards with professional tips.",
-      thumbnail: "https://via.placeholder.com/320x180", // Placeholder image
+      thumbnail: "/public/BeginnerTipsVideo.jpg", 
     },
     {
       id: 2,
       title: "Advanced Cue Control",
       description: "Master advanced cue control techniques.",
-      thumbnail: "https://via.placeholder.com/320x180",
+      thumbnail: "/public/AdvancedCueControl.jpg", 
     },
     {
       id: 3,
       title: "Bank Shots Explained",
       description: "Understand the mechanics of bank shots.",
-      thumbnail: "https://via.placeholder.com/320x180",
+      thumbnail: "/public/BankShotsExplained.jpg", 
     },
     {
       id: 4,
       title: "Position Play Strategies",
       description: "Improve your position play with these strategies.",
-      thumbnail: "https://via.placeholder.com/320x180",
+      thumbnail: "/public/PositionPlayStrategies.png", 
     },
     {
       id: 5,
       title: "Breaking Techniques",
       description: "Learn how to break like a pro.",
-      thumbnail: "https://via.placeholder.com/320x180",
+      thumbnail: "/public/BreakingStrategies.jpg", 
     },
     {
       id: 6,
       title: "Spin and English",
       description: "Master spin and English for better control.",
-      thumbnail: "https://via.placeholder.com/320x180",
+      thumbnail: "/public/SpinAndEnglish.jpg", 
     },
   ];
 
-  // Filter videos based on search query
+  
   const filteredVideos = videos.filter((video) =>
     video.title.toLowerCase().includes(searchQuery.toLowerCase())
   );
@@ -68,6 +68,17 @@ function TutorialsPage() {
           onChange={(e) => setSearchQuery(e.target.value)}
           size="lg"
           flex="1"
+          bg="white" 
+          color="black"
+          borderWidth="2px" 
+          borderColor="gray.300"
+          _hover={{
+            borderColor: "blue.500", 
+          }}
+          _focus={{
+            borderColor: "blue.500", 
+            boxShadow: "0 0 0 2px rgba(66, 153, 225, 0.6)", 
+          }}
         />
         <Button colorScheme="blue" size="lg">
           Search
@@ -77,9 +88,9 @@ function TutorialsPage() {
       {/* Video Grid */}
       <Grid
         templateColumns={{
-          base: "1fr", // 1 column on mobile
-          md: "repeat(2, 1fr)", // 2 columns on tablets
-          lg: "repeat(3, 1fr)", // 3 columns on desktops
+          base: "1fr", 
+          md: "repeat(2, 1fr)", 
+          lg: "repeat(3, 1fr)", 
         }}
         gap={6}
         maxW="1200px"

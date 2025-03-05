@@ -23,6 +23,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
 import {FaBars, FaTimes} from "react-icons/fa"
 import Home from "./pages/Home"
 import { Link } from "react-router-dom";
+import TutorialsPage from "./pages/TutorialsPage";
 
 function Navbar() {
   return (
@@ -159,9 +160,10 @@ function App() {
       <Router>
       <Box minH="100vh" display="flex" flexDirection="column" pt={16} width="100%" maxW="100%" overflowX="hidden" margin={0} padding={0}>
         <Navbar />
-        <Box flex="1">
+        <Box flex="1" width="100%">
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/tutorials" element={<TutorialsPage />} />
           </Routes>
         </Box>
         <Footer />

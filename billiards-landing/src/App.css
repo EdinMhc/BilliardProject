@@ -1,9 +1,16 @@
-#root {
-  max-width: 100%;
+body, #root {
   margin: 0;
   padding: 0;
-  text-align: center;
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
+
+.chakra-box, .chakra-flex, .chakra-grid {
+  width: 100%;
+}
+
 .logo {
   height: 6em;
   padding: 1.5em;

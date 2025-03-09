@@ -24,6 +24,7 @@ import {FaBars, FaTimes} from "react-icons/fa"
 import Home from "./pages/Home"
 import { Link } from "react-router-dom";
 import TutorialsPage from "./pages/TutorialsPage";
+import BillingPlanPage from "./pages/BillingPlanPage";
 
 function Navbar() {
   return (
@@ -164,6 +165,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/tutorials" element={<TutorialsPage />} />
+            <Route path="/billing" element={<BillingPlanPage />} />
           </Routes>
         </Box>
         <Footer />

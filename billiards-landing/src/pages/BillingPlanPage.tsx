@@ -1,4 +1,5 @@
-import { Flex, Text, Box, Heading, CheckboxGroup, CheckboxCard } from "@chakra-ui/react";
+import { HStack, RadioCard, Box, Text, Heading, Flex } from "@chakra-ui/react";
+
 function BillingPlanPage() {
   return (
     <Box
@@ -9,43 +10,70 @@ function BillingPlanPage() {
       alignItems="center"
       justifyContent="center"
       p={4}
+      bg="gray.50"
     >
-      <Heading mb={8} textAlign="center">
+      <Heading mb={8} textAlign="center" fontSize="3xl" fontWeight="bold" color="gray.800">
         Choose Your Plan
       </Heading>
 
-      <CheckboxGroup defaultValue={[]}>
-        <Flex gap={6} flexWrap="wrap" justifyContent="center">
-          {plans.map((plan) => (
-            <CheckboxCard.Root key={plan.value} value={plan.value}>
-              <CheckboxCard.HiddenInput />
-              <CheckboxCard.Control bg="white"> {/* Set background to white */}
-                <CheckboxCard.Content>
-                  <CheckboxCard.Label fontSize="xl" fontWeight="bold">
-                    {plan.title}
-                  </CheckboxCard.Label>
-                  <Text fontSize="lg" fontWeight="semibold" color="blue.600" mt={2}>
-                    {plan.price}
+      <RadioCard.Root defaultValue="beginner">
+        <HStack align="stretch">
+          {plans.map((item) => (
+            <RadioCard.Item key={item.value} value={item.value} flex="1">
+              <RadioCard.ItemHiddenInput />
+              <RadioCard.ItemControl
+                bg="white"
+                p={6}
+                borderRadius="lg"
+                borderWidth="2px"
+                borderColor="gray.200"
+                _checked={{
+                  borderColor: "blue.500",
+                  boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)",
+                }}
+                _hover={{
+                  borderColor: "blue.300",
+                }}
+                transition="all 0.2s"
+                minW="300px"
+              >
+                <RadioCard.ItemContent>
+                  <Text fontSize="2xl" fontWeight="bold" color="gray.800" mb={2}>
+                    {item.title}
                   </Text>
-                  <Box mt={4}>
-                    {plan.benefits.map((benefit, index) => (
-                      <Text key={index} fontSize="sm" color="gray.600" mt={1}>
+                  <Text fontSize="lg" fontWeight="semibold" color="blue.600" mb={4}>
+                    {item.price}
+                  </Text>
+                  <Flex direction="column" gap={2}>
+                    {item.benefits.map((benefit, index) => (
+                      <Text
+                        key={index}
+                        fontSize="sm"
+                        color="gray.600"
+                        p={2}
+                        bg="gray.100"
+                        borderRadius="md"
+                        _hover={{
+                          bg: "gray.200",
+                          transform: "translateY(-2px)",
+                        }}
+                        transition="all 0.2s"
+                      >
                         ✔️ {benefit}
                       </Text>
                     ))}
-                  </Box>
-                </CheckboxCard.Content>
-                <CheckboxCard.Indicator />
-              </CheckboxCard.Control>
-            </CheckboxCard.Root>
+                  </Flex>
+                </RadioCard.ItemContent>
+                <RadioCard.ItemIndicator />
+              </RadioCard.ItemControl>
+            </RadioCard.Item>
           ))}
-        </Flex>
-      </CheckboxGroup>
+        </HStack>
+      </RadioCard.Root>
     </Box>
   );
 }
 
-// Plans data
 const plans = [
   {
     value: "beginner",

@@ -5,13 +5,11 @@ import {
     Input,
     Button,
     Text,
-    Link,
     Field,
     Fieldset,
     Stack,
   } from "@chakra-ui/react";
   import { useState } from "react";
-  import { Link as RouterLink } from "react-router-dom";
   
   function RegisterPage() {
     const [formData, setFormData] = useState({

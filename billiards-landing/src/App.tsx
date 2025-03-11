@@ -1,5 +1,5 @@
-
-import './App.css'
+import { useState } from "react";
+import "./App.css";
 import {
   Text,
   Flex,
@@ -19,18 +19,20 @@ import {
   DrawerCloseTrigger,
   VStack,
 } from "@chakra-ui/react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
-import {FaBars, FaTimes} from "react-icons/fa"
-import Home from "./pages/Home"
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { FaBars, FaTimes } from "react-icons/fa";
+import Home from "./pages/Home";
 import { Link } from "react-router-dom";
 import TutorialsPage from "./pages/TutorialsPage";
 import BillingPlanPage from "./pages/BillingPlanPage";
-import RegisterPage from './pages/RegisterPage';
+import RegisterPage from "./pages/RegisterPage";
+import LoginModal from "./components/LoginModal";
 
 function Navbar() {
+  const [isLoginOpen, setIsLoginOpen] = useState(false);
+
   return (
     <>
-      {/* Regular Navbar for larger screens */}
       <Flex
         as="nav"
         p={4}
@@ -49,12 +51,8 @@ function Navbar() {
           <DrawerRoot>
             <DrawerBackdrop />
             <DrawerTrigger asChild>
-              <IconButton
-                aria-label="Open Menu"
-                variant="ghost"
-                color="white"
-              >
-              <FaBars />
+              <IconButton aria-label="Open Menu" variant="ghost" color="white">
+                <FaBars />
               </IconButton>
             </DrawerTrigger>
             <DrawerContent bg="black" color="white">
@@ -69,7 +67,7 @@ function Navbar() {
                     top={2}
                     right={2}
                   >
-                  <FaTimes />
+                    <FaTimes />
                   </IconButton>
                 </DrawerCloseTrigger>
               </DrawerHeader>
@@ -100,11 +98,9 @@ function Navbar() {
                       Register
                     </Button>
                   </Link>
-                  <Link to="/login">
-                    <Button variant="ghost" color="white" width="100%" justifyContent="start">
-                      Login
-                    </Button>
-                  </Link>
+                  <Button variant="ghost" color="white" width="100%" justifyContent="start" onClick={() => setIsLoginOpen(true)}>
+                    Login
+                  </Button>
                 </VStack>
               </DrawerBody>
               <DrawerFooter>
@@ -146,13 +142,14 @@ function Navbar() {
               Register
             </Button>
           </Link>
-          <Link to="/login">
-            <Button variant="ghost" colorScheme="whiteAlpha">
-              Login
-            </Button>
-          </Link>
+          <Button variant="ghost" colorScheme="whiteAlpha" onClick={() => setIsLoginOpen(true)}>
+            Login
+          </Button>
         </Flex>
       </Flex>
+
+      {/* Login Modal */}
+      <LoginModal isOpen={isLoginOpen} onClose={() => setIsLoginOpen(false)} />
     </>
   );
 }
@@ -168,8 +165,7 @@ function Footer() {
 
 function App() {
   return (
-    <>
-      <Router>
+    <Router>
       <Box minH="100vh" display="flex" flexDirection="column" pt={16} width="100%" maxW="100%" overflowX="hidden" margin={0} padding={0}>
         <Navbar />
         <Box flex="1" width="100%">
@@ -183,8 +179,7 @@ function App() {
         <Footer />
       </Box>
     </Router>
-    </>
-  )
+  );
 }
 
-export default App
+export default App;

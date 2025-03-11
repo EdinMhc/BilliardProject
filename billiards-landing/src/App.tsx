@@ -25,6 +25,7 @@ import Home from "./pages/Home"
 import { Link } from "react-router-dom";
 import TutorialsPage from "./pages/TutorialsPage";
 import BillingPlanPage from "./pages/BillingPlanPage";
+import RegisterPage from './pages/RegisterPage';
 
 function Navbar() {
   return (
@@ -94,6 +95,11 @@ function Navbar() {
                       Billing Plan
                     </Button>
                   </Link>
+                  <Link to="/register">
+                    <Button variant="ghost" color="white" width="100%" justifyContent="start">
+                      Register
+                    </Button>
+                  </Link>
                   <Link to="/login">
                     <Button variant="ghost" color="white" width="100%" justifyContent="start">
                       Login
@@ -135,6 +141,11 @@ function Navbar() {
             </Button>
           </Link>
           <Spacer /> {/* Push the login button to the far right */}
+          <Link to="/register">
+            <Button variant="ghost" colorScheme="whiteAlpha">
+              Register
+            </Button>
+          </Link>
           <Link to="/login">
             <Button variant="ghost" colorScheme="whiteAlpha">
               Login
@@ -166,6 +177,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/tutorials" element={<TutorialsPage />} />
             <Route path="/billing" element={<BillingPlanPage />} />
+            <Route path="/register" element={<RegisterPage />} />
           </Routes>
         </Box>
         <Footer />

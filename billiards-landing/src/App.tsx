@@ -83,11 +83,6 @@ function Navbar() {
                       Tutorials
                     </Button>
                   </Link>
-                  <Link to="/info">
-                    <Button variant="ghost" color="white" width="100%" justifyContent="start">
-                      Info
-                    </Button>
-                  </Link>
                   <Link to="/billing">
                     <Button variant="ghost" color="white" width="100%" justifyContent="start">
                       Billing Plan
@@ -124,11 +119,6 @@ function Navbar() {
           <Link to="/tutorials">
             <Button variant="ghost" color="white">
               Tutorials
-            </Button>
-          </Link>
-          <Link to="/info">
-            <Button variant="ghost" color="white">
-              Info
             </Button>
           </Link>
           <Link to="/billing">

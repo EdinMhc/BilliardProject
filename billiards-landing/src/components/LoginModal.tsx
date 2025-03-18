@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { motion } from "framer-motion";
 import {
   Box,
   Flex,
@@ -35,7 +36,7 @@ function LoginModal({ isOpen, onClose }: LoginModalProps) {
     setError("");
 
     try {
-      const response = await fetch("https://localhost:7044/api/account/login", {
+      const response = await fetch("https://localhost:7044/api/Account/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -58,6 +59,34 @@ function LoginModal({ isOpen, onClose }: LoginModalProps) {
   if (!isOpen) return null;
 
   return (
+    <>
+     <motion.div
+        initial={{ backdropFilter: "blur(0px)", opacity: 0 }}
+        animate={{ backdropFilter: "blur(8px)", opacity: 1 }}
+        exit={{ backdropFilter: "blur(0px)", opacity: 0 }}
+        transition={{ duration: 0.4 }}
+        style={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          width: "100vw",
+          height: "100vh",
+          background: "rgba(0, 0, 0, 0.4)",
+          zIndex: 10,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      />
+
+      {/* Modal with Smooth Scale & Fade Animation */}
+      <motion.div
+        initial={{ opacity: 0, scale: 0.8 }}
+        animate={{ opacity: 1, scale: 1 }}
+        exit={{ opacity: 0, scale: 0.8 }}
+        transition={{ duration: 0.3, ease: "easeOut" }}
+        style={{ zIndex: 11, position: "fixed" }}
+      ></motion.div>
     <Flex
       position="fixed"
       top={0}
@@ -100,12 +129,12 @@ function LoginModal({ isOpen, onClose }: LoginModalProps) {
             <Stack>
               <Field.Root>
                 <Field.Label color="black">Email</Field.Label>
-                <Input type="email" name="email" value={formData.email} onChange={handleChange} required />
+                <Input type="email" name="email" value={formData.email} onChange={handleChange} required color="black" />
               </Field.Root>
 
               <Field.Root>
                 <Field.Label color="black">Password</Field.Label>
-                <Input type="password" name="password" value={formData.password} onChange={handleChange} required />
+                <Input type="password" name="password" value={formData.password} onChange={handleChange} required color="black"/>
               </Field.Root>
             </Stack>
           </Fieldset.Root>
@@ -117,12 +146,13 @@ function LoginModal({ isOpen, onClose }: LoginModalProps) {
 
         <Text mt={4} textAlign="center" color="black">
           Don't have an account? {" "}
-          <RouterLink to="/register" color="blue.500">
+          <RouterLink to="/register" color="blue.500" onClick={onClose}>
             Register here
           </RouterLink>
         </Text>
       </Box>
     </Flex>
+    </>
   );
 }
 

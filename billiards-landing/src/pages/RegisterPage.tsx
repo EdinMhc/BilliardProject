@@ -28,11 +28,11 @@ import {
       setFormData({ ...formData, [name]: value });
     };
   
-    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: React.FormEvent) => {
       e.preventDefault();
       setError("");
       setSuccess("");
-  
+    
       try {
         const response = await fetch("https://localhost:7044/api/Account/register", {
           method: "POST",
@@ -41,12 +41,39 @@ import {
           },
           body: JSON.stringify(formData),
         });
-  
+    
+        
+        const contentType = response.headers.get("content-type");
+        let data;
+    
+        if (contentType && contentType.includes("application/json")) {
+          
+          data = await response.json();
+        } else {
+          
+          const text = await response.text();
+          data = text; 
+        }
+    
         if (response.ok) {
           setSuccess("User registered successfully!");
+        } else if (response.status === 400) {
+          
+          if (typeof data === "string") {
+            
+            setError(data);
+          } else if (data.errors && Array.isArray(data.errors)) {
+            
+            setError(data.errors[0]); 
+          } else if (data[""] && Array.isArray(data[""])) {
+            
+            setError(data[""][0]); 
+          } else {
+            
+            setError("Registration failed. Please check your input.");
+          }
         } else {
-          const data = await response.json();
-          setError(data.message || "Registration failed. Please try again.");
+          setError("An unexpected error occurred. Please try again.");
         }
       } catch (err) {
         setError("An error occurred. Please try again.");

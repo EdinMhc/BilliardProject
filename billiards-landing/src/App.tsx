@@ -27,11 +27,16 @@ import TutorialsPage from "./pages/TutorialsPage";
 import BillingPlanPage from "./pages/BillingPlanPage";
 import RegisterPage from "./pages/RegisterPage";
 import LoginModal from "./components/LoginModal";
-import { AuthProvider } from './components/Utilities/authContext';
 import AdminTestPage from "./pages/AdminTestPage";
+import MyStatsPage from "./pages/MyStatsPage";
+import MyTutorialsPage from "./pages/MyTutorialsPage";
+import { AuthProvider } from './components/Utilities/authContext';
+import { useAuth } from './components/Utilities/authContext';
+import { ProtectedRoute } from './components/Utilities/ProtectedRoute';
 
 function Navbar() {
   const [isLoginOpen, setIsLoginOpen] = useState(false);
+  const { token } = useAuth(); // Add this line to access auth state
 
   return (
     <>
@@ -85,19 +90,56 @@ function Navbar() {
                       Tutorials
                     </Button>
                   </Link>
+                  {token && (
+                    <>
+                      <Link to="/my-tutorials">
+                        <Button variant="ghost" color="white" width="100%" justifyContent="start">
+                          My Tutorials
+                        </Button>
+                      </Link>
+                      <Link to="/my-stats">
+                        <Button variant="ghost" color="white" width="100%" justifyContent="start">
+                          My Stats
+                        </Button>
+                      </Link>
+                    </>
+                  )}
                   <Link to="/billing">
                     <Button variant="ghost" color="white" width="100%" justifyContent="start">
                       Billing Plan
                     </Button>
                   </Link>
-                  <Link to="/register">
-                    <Button variant="ghost" color="white" width="100%" justifyContent="start">
-                      Register
+                  {!token ? (
+                    <>
+                      <Link to="/register">
+                        <Button variant="ghost" color="white" width="100%" justifyContent="start">
+                          Register
+                        </Button>
+                      </Link>
+                      <Button 
+                        variant="ghost" 
+                        color="white" 
+                        width="100%" 
+                        justifyContent="start" 
+                        onClick={() => setIsLoginOpen(true)}
+                      >
+                        Login
+                      </Button>
+                    </>
+                  ) : (
+                    <Button 
+                      variant="ghost" 
+                      color="white" 
+                      width="100%" 
+                      justifyContent="start"
+                      onClick={() => {
+                        localStorage.removeItem('authToken');
+                        window.location.href = '/';
+                      }}
+                    >
+                      Logout
                     </Button>
-                  </Link>
-                  <Button variant="ghost" color="white" width="100%" justifyContent="start" onClick={() => setIsLoginOpen(true)}>
-                    Login
-                  </Button>
+                  )}
                 </VStack>
               </DrawerBody>
               <DrawerFooter>
@@ -123,20 +165,49 @@ function Navbar() {
               Tutorials
             </Button>
           </Link>
+          {token && (
+            <>
+              <Link to="/my-tutorials">
+                <Button variant="ghost" color="white">
+                  My Tutorials
+                </Button>
+              </Link>
+              <Link to="/my-stats">
+                <Button variant="ghost" color="white">
+                  My Stats
+                </Button>
+              </Link>
+            </>
+          )}
           <Link to="/billing">
             <Button variant="ghost" color="white">
               Billing Plan
             </Button>
           </Link>
-          <Spacer /> {/* Push the login button to the far right */}
-          <Link to="/register">
-            <Button variant="ghost" colorScheme="whiteAlpha">
-              Register
+          <Spacer />
+          {!token ? (
+            <>
+              <Link to="/register">
+                <Button variant="ghost" colorScheme="whiteAlpha">
+                  Register
+                </Button>
+              </Link>
+              <Button variant="ghost" colorScheme="whiteAlpha" onClick={() => setIsLoginOpen(true)}>
+                Login
+              </Button>
+            </>
+          ) : (
+            <Button 
+              variant="ghost" 
+              colorScheme="whiteAlpha"
+              onClick={() => {
+                localStorage.removeItem('authToken');
+                window.location.href = '/';
+              }}
+            >
+              Logout
             </Button>
-          </Link>
-          <Button variant="ghost" colorScheme="whiteAlpha" onClick={() => setIsLoginOpen(true)}>
-            Login
-          </Button>
+          )}
         </Flex>
       </Flex>
 
@@ -168,6 +239,16 @@ function App() {
             <Route path="/billing" element={<BillingPlanPage />} />
             <Route path="/register" element={<RegisterPage />} />
             <Route path="/admin-test" element={<AdminTestPage />} />
+            <Route path="/my-tutorials" element={
+            <ProtectedRoute>
+              <MyTutorialsPage />
+            </ProtectedRoute>
+          } />
+          <Route path="/my-stats" element={
+            <ProtectedRoute>
+              <MyStatsPage />
+            </ProtectedRoute>
+          } />
           </Routes>
         </Box>
         <Footer />

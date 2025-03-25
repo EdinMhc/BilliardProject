@@ -31,12 +31,17 @@ import AdminTestPage from "./pages/AdminTestPage";
 import MyStatsPage from "./pages/MyStatsPage";
 import MyTutorialsPage from "./pages/MyTutorialsPage";
 import { AuthProvider } from './components/Utilities/authContext';
+import { AdminRoute } from './components/Utilities/AdminRoute';
 import { useAuth } from './components/Utilities/authContext';
 import { ProtectedRoute } from './components/Utilities/ProtectedRoute';
+import AdminSettingsPage from './pages/AdminSettingsPage';
+import MyStudentsPage from './pages/MyStudentsPage';
+import MyVideosPage from './pages/MyVideosPage';
+import { isAdmin, isSuperAdmin } from './components/Utilities/authUtils';
 
 function Navbar() {
   const [isLoginOpen, setIsLoginOpen] = useState(false);
-  const { token } = useAuth(); // Add this line to access auth state
+  const { token, userRoles } = useAuth();
 
   return (
     <>
@@ -104,6 +109,30 @@ function Navbar() {
                       </Link>
                     </>
                   )}
+                   {isAdmin(userRoles)  || isSuperAdmin(userRoles) && (
+            <>
+              <Link to="/admin/students">
+                <Button variant="ghost" color="white">
+                  My Students
+                </Button>
+              </Link>
+              <Link to="/admin/videos">
+                <Button variant="ghost" color="white">
+                  My Videos
+                </Button>
+              </Link>
+            </>
+          )}
+
+          {/* SuperAdmin-only links */}
+          {isSuperAdmin(userRoles) && (
+            <Link to="/admin/settings">
+              <Button variant="ghost" color="white">
+                Settings
+              </Button>
+            </Link>
+          )}
+
                   <Link to="/billing">
                     <Button variant="ghost" color="white" width="100%" justifyContent="start">
                       Billing Plan
@@ -174,6 +203,28 @@ function Navbar() {
               </Link>
             </>
           )}
+          {isAdmin(userRoles) || isSuperAdmin(userRoles) && (
+          <>
+            <Link to="/admin/students">
+              <Button variant="ghost" color="white">
+                My Students
+              </Button>
+            </Link>
+            <Link to="/admin/videos">
+              <Button variant="ghost" color="white">
+                My Videos
+              </Button>
+            </Link>
+          </>
+        )}
+
+        {isSuperAdmin(userRoles) && (
+          <Link to="/admin/settings">
+            <Button variant="ghost" color="white">
+              Settings
+            </Button>
+          </Link>
+        )}
           <Link to="/billing">
             <Button variant="ghost" color="white">
               Billing Plan
@@ -237,6 +288,27 @@ function App() {
           <Route path="/my-stats" element={
             <ProtectedRoute>
               <MyStatsPage />
+            </ProtectedRoute>
+          } />
+          <Route path="/admin/settings" element={
+            <ProtectedRoute>
+              <AdminRoute requiredRole="SuperAdmin">
+                <AdminSettingsPage />
+              </AdminRoute>
+            </ProtectedRoute>
+          } />
+          <Route path="/admin/students" element={
+            <ProtectedRoute>
+              <AdminRoute requiredRole="SuperAdmin">
+                <MyStudentsPage />
+              </AdminRoute>
+            </ProtectedRoute>
+          } />
+          <Route path="/admin/videos" element={
+            <ProtectedRoute>
+              <AdminRoute>
+                <MyVideosPage />
+              </AdminRoute>
             </ProtectedRoute>
           } />
           </Routes>

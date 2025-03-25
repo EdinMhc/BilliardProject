@@ -27,6 +27,8 @@ import TutorialsPage from "./pages/TutorialsPage";
 import BillingPlanPage from "./pages/BillingPlanPage";
 import RegisterPage from "./pages/RegisterPage";
 import LoginModal from "./components/LoginModal";
+import { AuthProvider } from './components/Utilities/authContext';
+import AdminTestPage from "./pages/AdminTestPage";
 
 function Navbar() {
   const [isLoginOpen, setIsLoginOpen] = useState(false);
@@ -156,6 +158,7 @@ function Footer() {
 function App() {
   return (
     <Router>
+      <AuthProvider>
       <Box minH="100vh" display="flex" flexDirection="column" pt={16} width="100%" maxW="100%" overflowX="hidden" margin={0} padding={0}>
         <Navbar />
         <Box flex="1" width="100%">
@@ -164,10 +167,12 @@ function App() {
             <Route path="/tutorials" element={<TutorialsPage />} />
             <Route path="/billing" element={<BillingPlanPage />} />
             <Route path="/register" element={<RegisterPage />} />
+            <Route path="/admin-test" element={<AdminTestPage />} />
           </Routes>
         </Box>
         <Footer />
       </Box>
+      </AuthProvider>
     </Router>
   );
 }

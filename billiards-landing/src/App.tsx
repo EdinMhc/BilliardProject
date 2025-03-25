@@ -111,11 +111,6 @@ function Navbar() {
                   </Link>
                   {!token ? (
                     <>
-                      <Link to="/register">
-                        <Button variant="ghost" color="white" width="100%" justifyContent="start">
-                          Register
-                        </Button>
-                      </Link>
                       <Button 
                         variant="ghost" 
                         color="white" 
@@ -187,11 +182,6 @@ function Navbar() {
           <Spacer />
           {!token ? (
             <>
-              <Link to="/register">
-                <Button variant="ghost" colorScheme="whiteAlpha">
-                  Register
-                </Button>
-              </Link>
               <Button variant="ghost" colorScheme="whiteAlpha" onClick={() => setIsLoginOpen(true)}>
                 Login
               </Button>

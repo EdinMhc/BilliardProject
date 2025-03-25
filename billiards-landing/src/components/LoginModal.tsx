@@ -150,14 +150,15 @@ function LoginModal({ isOpen, onClose }: LoginModalProps) {
                 width="100%" 
                 mt={4}
                 loading={isLoading}
+                backgroundColor="gray.200"
               >
                 Login
               </Button>
             </form>
 
             <Text mt={4} textAlign="center" color="black">
-              Don't have an account? {" "}
-              <RouterLink to="/register" color="blue.500" onClick={onClose}>
+              Don't have an account?{" "}
+              <RouterLink to="/register" style={{ color: "blue" }} onClick={onClose}>
                 Register here
               </RouterLink>
             </Text>

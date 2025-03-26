@@ -98,12 +98,12 @@ function Navbar() {
                   {token && (
                     <>
                       <Link to="/my-tutorials">
-                        <Button variant="ghost" color="white" width="100%" justifyContent="start">
+                        <Button variant="solid" bgColor="yellow.400" _hover={{ bg: "yellow.300" }} width="100%" justifyContent="start">
                           My Tutorials
                         </Button>
                       </Link>
                       <Link to="/my-stats">
-                        <Button variant="ghost" color="white" width="100%" justifyContent="start">
+                        <Button variant="solid" bgColor="yellow.400" _hover={{ bg: "yellow.300" }} width="100%" justifyContent="start">
                           My Stats
                         </Button>
                       </Link>
@@ -112,12 +112,12 @@ function Navbar() {
                    {isAdmin(userRoles)  || isSuperAdmin(userRoles) && (
             <>
               <Link to="/admin/students">
-                <Button variant="ghost" color="white">
+                <Button variant="solid" bgColor="yellow.400" _hover={{ bg: "yellow.300" }}>
                   My Students
                 </Button>
               </Link>
               <Link to="/admin/videos">
-                <Button variant="ghost" color="white">
+                <Button variant="solid" bgColor="yellow.400" _hover={{ bg: "yellow.300" }}>
                   My Videos
                 </Button>
               </Link>
@@ -127,7 +127,7 @@ function Navbar() {
           {/* SuperAdmin-only links */}
           {isSuperAdmin(userRoles) && (
             <Link to="/admin/settings">
-              <Button variant="ghost" color="white">
+              <Button variant="solid" bgColor="yellow.400" _hover={{ bg: "yellow.300" }}>
                 Settings
               </Button>
             </Link>
@@ -192,12 +192,12 @@ function Navbar() {
           {token && (
             <>
               <Link to="/my-tutorials">
-                <Button variant="ghost" color="white">
+                <Button variant="solid" bgColor="yellow.400" _hover={{ bg: "yellow.300" }}>
                   My Tutorials
                 </Button>
               </Link>
               <Link to="/my-stats">
-                <Button variant="ghost" color="white">
+                <Button variant="solid" bgColor="yellow.400" _hover={{ bg: "yellow.300" }}>
                   My Stats
                 </Button>
               </Link>
@@ -206,12 +206,12 @@ function Navbar() {
           {isAdmin(userRoles) || isSuperAdmin(userRoles) && (
           <>
             <Link to="/admin/students">
-              <Button variant="ghost" color="white">
+              <Button variant="solid" bgColor="yellow.400">
                 My Students
               </Button>
             </Link>
             <Link to="/admin/videos">
-              <Button variant="ghost" color="white">
+              <Button variant="solid" bgColor="yellow.400">
                 My Videos
               </Button>
             </Link>
@@ -220,7 +220,7 @@ function Navbar() {
 
         {isSuperAdmin(userRoles) && (
           <Link to="/admin/settings">
-            <Button variant="ghost" color="white">
+            <Button variant="solid" bgColor="yellow.400">
               Settings
             </Button>
           </Link>

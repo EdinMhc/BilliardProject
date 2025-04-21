@@ -17,6 +17,14 @@ interface Student {
   isAdmin: boolean;
 }
 
+interface BillingPlan {
+  id: string;
+  userId: string;
+  beginnerProgram: boolean;
+  advancedProgram: boolean;
+  onlineSchoolProgram: boolean;
+}
+
 function MyStudentsPage() {
   const { userRoles } = useAuth();
   const [students, setStudents] = useState<Student[]>([]);
@@ -25,23 +33,35 @@ function MyStudentsPage() {
 
   useEffect(() => {
     if (!userRoles.includes('SuperAdmin')) return;
-
+  
     const fetchStudents = async () => {
       try {
-        const response = await fetchWithAuth("https://localhost:7044/api/admin/users");
-        if (!response.ok) {
-          throw new Error("Failed to fetch students");
+        const [usersResponse, billingPlansResponse] = await Promise.all([
+          fetchWithAuth("https://localhost:7044/api/admin/users"),
+          fetchWithAuth("https://localhost:7044/api/admin/users/billingplans")
+        ]);
+  
+        if (!usersResponse.ok || !billingPlansResponse.ok) {
+          throw new Error("Failed to fetch data");
         }
-        const data = await response.json();
-        const mappedStudents = data.map((student: any) => ({
-          ...student,
-          role: student.role || "Student",
-          level: student.level || "Beginner",
-          hasBeginnerProgram: student.hasBeginnerProgram || false,
-          hasAdvancedProgram: student.hasAdvancedProgram || false,
-          hasOnlineProgram: student.hasOnlineProgram || false,
-          isAdmin: student.isAdmin || false,
-        }));
+  
+        const usersData = await usersResponse.json();
+        const billingPlansData: BillingPlan[] = await billingPlansResponse.json();
+  
+        const mappedStudents = usersData.map((student: any) => {
+          const userBillingPlan = billingPlansData.find(bp => bp.userId === student.id);
+  
+          return {
+            ...student,
+            role: student.role || "Student",
+            level: student.level || "Beginner",
+            hasBeginnerProgram: userBillingPlan ? userBillingPlan.beginnerProgram : false,
+            hasAdvancedProgram: userBillingPlan ? userBillingPlan.advancedProgram : false,
+            hasOnlineProgram: userBillingPlan ? userBillingPlan.onlineSchoolProgram : false,
+            isAdmin: student.isAdmin || false,
+          };
+        });
+  
         setStudents(mappedStudents);
       } catch (err) {
         setError(err instanceof Error ? err.message : "An error occurred");
@@ -49,7 +69,7 @@ function MyStudentsPage() {
         setLoading(false);
       }
     };
-
+  
     fetchStudents();
   }, [userRoles]);
 

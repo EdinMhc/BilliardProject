@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./App.css";
 import {
   Text,
@@ -19,7 +19,7 @@ import {
   DrawerCloseTrigger,
   VStack,
 } from "@chakra-ui/react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, useLocation, Navigate } from "react-router-dom";
 import { FaBars, FaTimes } from "react-icons/fa";
 import Home from "./pages/Home";
 import { Link } from "react-router-dom";
@@ -40,9 +40,13 @@ import MyVideosPage from './pages/MyVideosPage';
 import { isAdmin, isSuperAdmin } from './components/Utilities/authUtils';
 
 function Navbar() {
-  const [isLoginOpen, setIsLoginOpen] = useState(false);
-  const { token, userRoles } = useAuth();
+  const location = useLocation();
+  const [isLoginOpen, setIsLoginOpen] = useState(location.state?.showLogin || false);
+  const { token, userRoles, logout } = useAuth();
 
+  useEffect(() => {
+    setIsLoginOpen(location.state?.showLogin || false);
+  }, [location]);
   return (
     <>
       <Flex
@@ -157,8 +161,8 @@ function Navbar() {
                       width="100%" 
                       justifyContent="start"
                       onClick={() => {
-                        localStorage.removeItem('authToken');
-                        window.location.href = '/';
+                        console.log('Logout button clicked'); 
+                        logout();
                       }}
                     >
                       Logout
@@ -239,13 +243,13 @@ function Navbar() {
             </>
           ) : (
             <Button 
-              variant="ghost" 
-              colorScheme="whiteAlpha"
-              onClick={() => {
-                localStorage.removeItem('authToken');
-                window.location.href = '/';
-              }}
-            >
+            variant="ghost" 
+            color="white" 
+            onClick={() => {
+              console.log('Logout button clicked'); // Add this for debugging
+              logout();
+            }}
+          >
               Logout
             </Button>
           )}
@@ -271,50 +275,59 @@ function App() {
   return (
     <Router>
       <AuthProvider>
-      <Box minH="100vh" display="flex" flexDirection="column" pt={16} width="100%" maxW="100%" overflowX="hidden" margin={0} padding={0}>
-        <Navbar />
-        <Box flex="1" width="100%">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/tutorials" element={<TutorialsPage />} />
-            <Route path="/billing" element={<BillingPlanPage />} />
-            <Route path="/register" element={<RegisterPage />} />
-            <Route path="/admin-test" element={<AdminTestPage />} />
-            <Route path="/my-tutorials" element={
-            <ProtectedRoute>
-              <MyTutorialsPage />
-            </ProtectedRoute>
-          } />
-          <Route path="/my-stats" element={
-            <ProtectedRoute>
-              <MyStatsPage />
-            </ProtectedRoute>
-          } />
-          <Route path="/admin/settings" element={
-            <ProtectedRoute>
-              <AdminRoute requiredRole="SuperAdmin">
-                <AdminSettingsPage />
-              </AdminRoute>
-            </ProtectedRoute>
-          } />
-          <Route path="/admin/students" element={
-            <ProtectedRoute>
-              <AdminRoute requiredRole="SuperAdmin">
-                <MyStudentsPage />
-              </AdminRoute>
-            </ProtectedRoute>
-          } />
-          <Route path="/admin/videos" element={
-            <ProtectedRoute>
-              <AdminRoute>
-                <MyVideosPage />
-              </AdminRoute>
-            </ProtectedRoute>
-          } />
-          </Routes>
+        <Box minH="100vh" display="flex" flexDirection="column" pt={16} width="100%" maxW="100%" overflowX="hidden" margin={0} padding={0}>
+          <Navbar />
+          <Box flex="1" width="100%">
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/tutorials" element={<TutorialsPage />} />
+              <Route path="/billing" element={<BillingPlanPage />} />
+              <Route path="/register" element={<RegisterPage />} />
+              <Route path="/admin-test" element={<AdminTestPage />} />
+              
+              {/* Protected Routes */}
+              <Route path="/my-tutorials" element={
+                <ProtectedRoute>
+                  <MyTutorialsPage />
+                </ProtectedRoute>
+              } />
+              
+              <Route path="/my-stats" element={
+                <ProtectedRoute>
+                  <MyStatsPage />
+                </ProtectedRoute>
+              } />
+              
+              <Route path="/admin/settings" element={
+                <ProtectedRoute>
+                  <AdminRoute requiredRole="SuperAdmin">
+                    <AdminSettingsPage />
+                  </AdminRoute>
+                </ProtectedRoute>
+              } />
+              
+              <Route path="/admin/students" element={
+                <ProtectedRoute>
+                  <AdminRoute requiredRole="SuperAdmin">
+                    <MyStudentsPage />
+                  </AdminRoute>
+                </ProtectedRoute>
+              } />
+              
+              <Route path="/admin/videos" element={
+                <ProtectedRoute>
+                  <AdminRoute>
+                    <MyVideosPage />
+                  </AdminRoute>
+                </ProtectedRoute>
+              } />
+              
+              {/* Catch-all route */}
+              <Route path="*" element={<Navigate to="/" />} />
+            </Routes>
+          </Box>
+          <Footer />
         </Box>
-        <Footer />
-      </Box>
       </AuthProvider>
     </Router>
   );

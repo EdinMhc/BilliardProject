@@ -1,12 +1,15 @@
 import { useAuth } from './authContext';
 import { Navigate } from 'react-router-dom';
-import 'react';
 
 export function ProtectedRoute({ children }: { children: React.ReactNode }) {
-  const { token } = useAuth();
+  const { token, initialized } = useAuth();
+
+  if (!initialized) {
+    return null;
+  }
 
   if (!token) {
-    return <Navigate to="/login" replace />;
+    return <Navigate to="/" state={{ showLogin: true }} replace />;
   }
 
   return children;

@@ -37,7 +37,7 @@ function LoginModal({ isOpen, onClose }: LoginModalProps) {
     e.preventDefault();
     setError("");
     setIsLoading(true);
-
+  
     try {
       const response = await fetch("https://localhost:7044/api/Account/login", {
         method: "POST",
@@ -46,13 +46,15 @@ function LoginModal({ isOpen, onClose }: LoginModalProps) {
         },
         body: JSON.stringify(formData),
       });
-
+  
       if (!response.ok) {
         throw new Error("Invalid email or password. Login failed");
       }
-
+  
       const data = await response.json();
-      login(data.token);
+      
+      // Call login with token and expiration time (adjust based on your API response)
+      login(data.token, data.expiresIn * 1000); // Convert seconds to milliseconds
       onClose();
     } catch (err) {
       setError(err instanceof Error ? err.message : "An error occurred");

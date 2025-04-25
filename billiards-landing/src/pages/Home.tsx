@@ -64,7 +64,7 @@ function HomePage() {
           <Heading fontSize="3xl" mb={4}>
             Juso Hasanovic
           </Heading>
-          <Text fontSize="lg" color="gray.600" mb={4}>
+          <Text fontSize="lg" color="gray.300" mb={4}>
             Professional Billiards Trainer with over 20 years of experience. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
           </Text>
           <Button colorScheme="blue" size="lg">

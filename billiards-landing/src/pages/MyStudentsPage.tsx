@@ -36,21 +36,26 @@ function MyStudentsPage() {
   
     const fetchStudents = async () => {
       try {
-        const [usersResponse, billingPlansResponse] = await Promise.all([
+        const [usersResponse, billingPlansResponse, adminUsersResponse] = await Promise.all([
           fetchWithAuth("https://localhost:7044/api/admin/users"),
-          fetchWithAuth("https://localhost:7044/api/admin/users/billingplans")
+          fetchWithAuth("https://localhost:7044/api/admin/users/billingplans"),
+          fetchWithAuth("https://localhost:7044/api/admin/users/roles")
         ]);
   
-        if (!usersResponse.ok || !billingPlansResponse.ok) {
+        if (!usersResponse.ok || !billingPlansResponse.ok || !adminUsersResponse.ok) {
           throw new Error("Failed to fetch data");
         }
   
         const usersData = await usersResponse.json();
         const billingPlansData: BillingPlan[] = await billingPlansResponse.json();
+        const adminUsersData = await adminUsersResponse.json();
   
         const mappedStudents = usersData.map((student: any) => {
           const userBillingPlan = billingPlansData.find(bp => bp.userId === student.id);
-  
+          const isAdmin = adminUsersData.some((adminUser: any) => {
+            return adminUser.userId === student.id && adminUser.isAdmin;
+          });
+          
           return {
             ...student,
             role: student.role || "Student",
@@ -58,7 +63,7 @@ function MyStudentsPage() {
             hasBeginnerProgram: userBillingPlan ? userBillingPlan.beginnerProgram : false,
             hasAdvancedProgram: userBillingPlan ? userBillingPlan.advancedProgram : false,
             hasOnlineProgram: userBillingPlan ? userBillingPlan.onlineSchoolProgram : false,
-            isAdmin: student.isAdmin || false,
+            isAdmin: isAdmin,
           };
         });
   
@@ -167,46 +172,45 @@ function MyStudentsPage() {
     }
   };
 
-  const handlePermissionChange = async (
-    studentId: string,
-    field: keyof Student,
-    value: boolean | string
-  ) => {
+  const handleAdminPermissionChange = async (studentId: string, shouldBeAdmin: boolean) => {
     try {
-      // Optimistic UI update
       setStudents(prevStudents =>
         prevStudents.map(student =>
-          student.id === studentId ? { ...student, [field]: value } : student
+          student.id === studentId ? { ...student, isAdmin: shouldBeAdmin } : student
         )
       );
 
       const response = await fetchWithAuth(
-        `https://localhost:7044/api/admin/users/${studentId}/permissions`,
+        `https://localhost:7044/api/admin/${studentId}/permissions`,
         {
-          method: "PUT",
-          body: JSON.stringify({ [field]: value }),
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: shouldBeAdmin.toString(),
         }
       );
 
       if (!response.ok) {
-        throw new Error("Failed to update permissions");
+        throw new Error("Failed to update admin permission");
       }
     } catch (err) {
-      // Revert optimistic update
       setStudents(prevStudents =>
         prevStudents.map(student =>
-          student.id === studentId
-            ? {
-                ...student,
-                [field]: !value,
-              }
-            : student
+          student.id === studentId ? { ...student, isAdmin: !shouldBeAdmin } : student
         )
       );
+      console.error("Error updating admin permission:", err);
     }
   };
 
-  // ... (keep the existing permission checks and loading/error states)
+  if (loading) {
+    return (
+      <Box p={4}>
+        <Spinner size="xl" />
+      </Box>
+    );
+  }
 
   return (
     <Box p={4} overflowX="auto">
@@ -235,9 +239,11 @@ function MyStudentsPage() {
                 <Table.Cell>{student.role}</Table.Cell>
                 <Table.Cell>{student.level}</Table.Cell>
                 <Table.Cell>
-                  <Checkbox.Root variant="subtle" colorPalette={"blue"}
+                  <Checkbox.Root
+                    variant="subtle"
+                    colorPalette="blue"
                     checked={student.hasBeginnerProgram}
-                    onCheckedChange={() => 
+                    onCheckedChange={() =>
                       handleProgramChange(
                         student.id,
                         "beginner",
@@ -250,7 +256,9 @@ function MyStudentsPage() {
                   </Checkbox.Root>
                 </Table.Cell>
                 <Table.Cell>
-                  <Checkbox.Root variant="subtle" colorPalette={"blue"} 
+                  <Checkbox.Root
+                    variant="subtle"
+                    colorPalette="blue"
                     checked={student.hasAdvancedProgram}
                     onCheckedChange={() =>
                       handleProgramChange(
@@ -265,7 +273,9 @@ function MyStudentsPage() {
                   </Checkbox.Root>
                 </Table.Cell>
                 <Table.Cell>
-                  <Checkbox.Root variant="subtle" colorPalette={"blue"} 
+                  <Checkbox.Root
+                    variant="subtle"
+                    colorPalette="blue"
                     checked={student.hasOnlineProgram}
                     onCheckedChange={() =>
                       handleProgramChange(
@@ -280,15 +290,14 @@ function MyStudentsPage() {
                   </Checkbox.Root>
                 </Table.Cell>
                 <Table.Cell>
-                  <Checkbox.Root variant="subtle" colorPalette={"blue"} 
+                  <Checkbox.Root
+                    variant="subtle"
+                    colorPalette="blue"
                     checked={student.isAdmin}
-                    onCheckedChange={(e) =>
-                      handlePermissionChange(
-                        student.id,
-                        "isAdmin",
-                        !!e.checked
-                      )
-                    }
+                    onCheckedChange={(e) => {
+                      const isChecked = !!e.checked;
+                      handleAdminPermissionChange(student.id, isChecked);
+                    }}
                   >
                     <Checkbox.HiddenInput />
                     <Checkbox.Control />
